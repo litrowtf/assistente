@@ -518,7 +518,6 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldNomeActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldNomeKeyPressed"/>
                       </Events>
                     </Component>
@@ -533,8 +532,20 @@
                       </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldVinculo">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="fe" green="fe" red="fe" type="rgb"/>
+                        </Property>
+                      </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldEmail">
+                      <Properties>
+                        <Property name="editable" type="boolean" value="false"/>
+                        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                          <Color blue="fe" green="fe" red="fe" type="rgb"/>
+                        </Property>
+                      </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldCPF">
                       <Properties>
@@ -543,7 +554,6 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldCPFActionPerformed"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldCPFKeyPressed"/>
                       </Events>
                     </Component>

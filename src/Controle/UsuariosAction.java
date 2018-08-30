@@ -47,6 +47,16 @@ public class UsuariosAction {
     JTable jTableConsultaUsuario;
     JTable jTableGEDOC;
     int ultimoFocus;
+    int count1 = 0, 
+            count2 = 0, 
+            count3 = 0, 
+            count4 = 0,
+            count5 = 0,
+            count6 = 0,
+            count7 = 0,
+            count8 = 0,
+            count9 = 0,
+            totalObjInstanciados = 0;
     int chaveDosInfernos = 0;
     Statement statement;
 
@@ -62,7 +72,7 @@ public class UsuariosAction {
             JTextArea jTextAreaLotacaoUsuario, 
             Statement statement,
             int ultimoFocus) {
-
+        System.out.println("Atribuindo valores às variàveis do construtor UsuariosAction: " + count1++ +" - total instanciado: " +totalObjInstanciados++);
         this.jTextFieldLogin = jTextFieldLogin;
         this.jTextFieldNome = jTextFieldNome;
         this.jTextFieldMatricula = jTextFieldMatricula;
@@ -79,7 +89,6 @@ public class UsuariosAction {
     }
 
     public void consultarUsuario(String paramConsulta, int campoConsultado) {
-
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<ConsultaUsuario> consultaUsuarioLista = new ArrayList();
@@ -97,6 +106,7 @@ public class UsuariosAction {
                 columnCount = metaRS.getColumnCount();
 
                 while (resultSet.next()) { //Percorre todas as linhas do resultado da consulta ao banco
+                    System.out.println("Quantas vezes ConsultaUsuario() foi instanciado: " + count2++ +" - total instanciado: " +totalObjInstanciados++);
                     ConsultaUsuario consultaUsuario = new ConsultaUsuario(); //Instancia a classe que armazenará os valores de cada registro numa linha
                     for (int i = 1; i <= columnCount; i++) { //Percorre cada registro de uma linha
                         switch (i) { //Verifica o que é cada registro para armazenar no local correto
@@ -122,7 +132,7 @@ public class UsuariosAction {
                     }
                     consultaUsuarioLista.add(consultaUsuario); //Adiciona as linhas da tabela no Array promotorVinculadoLista
                 }
-
+                System.out.println("Quantas vezes ConsultaUsuarioTableModel foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
                 ConsultaUsuarioTableModel tableModel = new ConsultaUsuarioTableModel(consultaUsuarioLista);
                 jTableConsultaUsuario.setModel(tableModel);
 
@@ -152,6 +162,7 @@ public class UsuariosAction {
         final int columnCount;
         ArrayList<PermissaoMastiffUsuario> listaPermissao = new ArrayList();
         try {
+            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
             Consultas consulta = new Consultas();
 
             consulta.consultarUsuarioPermissaoMastiff(login);
@@ -161,6 +172,7 @@ public class UsuariosAction {
             columnCount = metaRS.getColumnCount();
 
             while (resultSet.next()) {
+                System.out.println("Quantas vezes PermissaoMastiffUsuario() foi instanciado: " + count4++ +" - total instanciado: " +totalObjInstanciados++);
                 PermissaoMastiffUsuario permissaoMastiffUsuario = new PermissaoMastiffUsuario();
                 for (int i = 1; i <= columnCount; i++) {
                     permissaoMastiffUsuario.setPermissaoMastiff(resultSet.getString(i));
@@ -169,6 +181,7 @@ public class UsuariosAction {
             }
             
             //Mostrar permissões Mastiff
+            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
             StringBuilder saidaString = new StringBuilder();
             listaPermissao.forEach((txt) -> {
                 saidaString.append(txt.getPermissaoMastiff());
@@ -188,6 +201,7 @@ public class UsuariosAction {
         ArrayList<LotacaoUsuarioSIMP> listaLotacao = new ArrayList();
 
         try {
+            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
             Consultas consulta = new Consultas();
 
             consulta.consultarUsuarioLotacao(login);
@@ -205,6 +219,7 @@ public class UsuariosAction {
             }
             
             //Mostrar lotação usuário
+            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
             StringBuilder saidaString = new StringBuilder();
             listaLotacao.forEach((txt) -> {
                 saidaString.append(txt.getLotacao());
@@ -225,6 +240,7 @@ public class UsuariosAction {
         ArrayList<InfoGedoc> listaInfoGedoc = new ArrayList();
         if (!(login.equals(""))) {
             try {
+                System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
                 Consultas consulta = new Consultas();
                 // A PARTIR DAQUI, DEVE TRATAR QUAL CONSULTA SERÁ FEITA NO BANCO BASEADO 
                 // NO CAMPO QUE FOI INSERIDO O VALOR
@@ -235,6 +251,7 @@ public class UsuariosAction {
                 columnCount = metaRS.getColumnCount();
 
                 while (resultSet.next()) { //Percorre todas as linhas do resultado da consulta ao banco
+                    System.out.println("Quantas vezes infoGedoc() foi instanciado: " + count6++ +" - total instanciado: " +totalObjInstanciados++);
                     InfoGedoc infoGedoc = new InfoGedoc(); //Instancia a classe que armazenará os valores de cada registro numa linha
                     for (int i = 1; i <= columnCount; i++) { //Percorre cada registro de uma linha
                         switch (i) { //Verifica o que é cada registro para armazenar no local correto
@@ -257,9 +274,10 @@ public class UsuariosAction {
                     }
                     listaInfoGedoc.add(infoGedoc); //Adiciona as linhas da tabela no Array promotorVinculadoLista
                 }
-
+                System.out.println("Quantas vezes ListarInfoGedocTableModel(listaInfoGedoc) foi instanciado: " + count7++ +" - total instanciado: " +totalObjInstanciados++);
                 ListarInfoGedocTableModel tableModel = new ListarInfoGedocTableModel(listaInfoGedoc);
                 jTableGEDOC.setModel(tableModel);
+                System.out.println("Quantas vezes ListarInfoGedocTableCellRenderer() foi instanciado: " + count8++ +" - total instanciado: " +totalObjInstanciados++);
                 jTableGEDOC.setDefaultRenderer(Object.class, new ListarInfoGedocTableCellRenderer());
 //                jTableGEDOC.setRowSelectionAllowed(true);;
                 //configurar largura da coluna
@@ -311,6 +329,7 @@ public class UsuariosAction {
     }
 
     private String tratarParamSQL(String parametro) {
+        System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
         StringBuilder str = new StringBuilder();
 
         parametro = parametro.trim().replace(" ", "%");
@@ -323,6 +342,7 @@ public class UsuariosAction {
     
     //Evento disparar ação ao selecionar as linhas da tabela
     private void tableListSelectionListener() {
+        System.out.println("Quantas vezes ListSelectionListener() foi instanciado: " + count9++ +" - total instanciado: " +totalObjInstanciados++);
         jTableConsultaUsuario.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {

@@ -22,7 +22,7 @@ public class ConexaoOracle {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             
             conexao = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@//192.168.150.241:1521/racmppa.mppa.mp.br","P_LEANDROMALAQUIAS","qwe123QWE!@#");
+                    "jdbc:oracle:thin:@//192.168.150.241:1521/racmppa.mppa.mp.br","ASSISTENTE_SUPORTE","R@CMpP@$up0rtE");
             
         } catch(ClassNotFoundException | SQLException e){
             e.printStackTrace();

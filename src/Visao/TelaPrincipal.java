@@ -47,7 +47,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private int countTest3 = 0;
     private String utimoFoco = "";
     private static URL caminhoImagem;
-    private String versao = "Alpha V1.0";
+    private String versao = "Alpha V1.2";
     private Connection conexao;
     private Statement statement;
     
@@ -292,11 +292,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTextFieldNome.setBackground(new java.awt.Color(254, 255, 217));
         jTextFieldNome.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        jTextFieldNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldNomeActionPerformed(evt);
-            }
-        });
         jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldNomeKeyPressed(evt);
@@ -310,12 +305,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jTextFieldVinculo.setEditable(false);
+        jTextFieldVinculo.setBackground(new java.awt.Color(254, 254, 254));
+
+        jTextFieldEmail.setEditable(false);
+        jTextFieldEmail.setBackground(new java.awt.Color(254, 254, 254));
+
         jTextFieldCPF.setBackground(new java.awt.Color(254, 255, 217));
-        jTextFieldCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldCPFActionPerformed(evt);
-            }
-        });
         jTextFieldCPF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldCPFKeyPressed(evt);
@@ -579,10 +575,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         telaAbout.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jTextFieldCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldCPFActionPerformed
-
     private void jMenuItemCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopiarActionPerformed
         if ((jTableConsultaUsuario.getSelectedRow() < 0 || jTableConsultaUsuario.getSelectedColumn() < 0) && 
                 (jTableGEDOC.getSelectedRow() < 0 || jTableGEDOC.getSelectedColumn() < 0)) {
@@ -609,10 +601,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jTableGEDOCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTableGEDOCFocusLost
         setUtimoFoco(this.getClass().getDeclaredFields()[49].getName()); //49 é o ID do jTableGEDOC
     }//GEN-LAST:event_jTableGEDOCFocusLost
-
-    private void jTextFieldNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldNomeActionPerformed
 
     private String validaString(Object objeto) {
         if (objeto != null) {
@@ -690,8 +678,12 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void abrirConexao() throws SQLException {
         //criar variável para verificar se a conexão foi bem sucedida
-        conexao = ConexaoOracle.ObterConexao();
-        statement = conexao.createStatement();
+        if (conexao == null) {
+            conexao = ConexaoOracle.ObterConexao();
+            statement = conexao.createStatement();
+        } else{
+            statement = conexao.createStatement();
+        }
     }
     
    
