@@ -5,7 +5,6 @@
  */
 package Controle;
 
-import Conexao.ConexaoOracle;
 import Modelo.Consultas;
 import Modelo.NumeroRegistro;
 import Modelo.NumeroRegistroTableModel;
@@ -17,7 +16,6 @@ import static Visao.TelaPrincipal.DESCLOCAL;
 import static Visao.TelaPrincipal.DESCPROMOTOR;
 import static Visao.TelaPrincipal.IDLOCAL;
 import static Visao.TelaPrincipal.IDPROMOTOR;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -33,6 +31,11 @@ import javax.swing.JTable;
  * @author leandro
  */
 public class LocaisAction {
+    Statement statement;
+    
+    public LocaisAction(Statement statement){
+        this.statement = statement;
+    }
 
     public void buscarNumeroRegistroLocais(JTable table) {
         final ResultSetMetaData metaRS;
@@ -40,10 +43,7 @@ public class LocaisAction {
         ArrayList<NumeroRegistro> numRegLista = new ArrayList();
         NumeroRegistroTableModel tableModel = null;
 
-        Connection conexao;
         try {
-            conexao = ConexaoOracle.ObterConexao();
-            Statement statement = conexao.createStatement();
             Consultas consulta = new Consultas();
 
             consulta.selecionarConsulta(Consultas.REGISTRODISPONIVEL);
@@ -84,10 +84,7 @@ public class LocaisAction {
         String paramLocal = tratarParamSQL(local);
 
         if (!(paramLocal.equals(""))) {
-            Connection conexao;
             try {
-                conexao = ConexaoOracle.ObterConexao();
-                Statement statement = conexao.createStatement();
                 Consultas consulta = new Consultas();
 
                 consulta.selecionarConsulta(Consultas.PROMOTORVINCULADO, paramLocal);

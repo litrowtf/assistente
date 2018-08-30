@@ -5,6 +5,7 @@
  */
 package Visao;
 
+import Conexao.ConexaoOracle;
 import Controle.LocaisAction;
 import Controle.UsuariosAction;
 import java.awt.Image;
@@ -13,6 +14,11 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -42,13 +48,22 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private String utimoFoco = "";
     private static URL caminhoImagem;
     private String versao = "Alpha V1.0";
+    private Connection conexao;
+    private Statement statement;
     
 
     public TelaPrincipal() {
         initComponents();
         countTest2++;
-        System.out.println("Passou " + countTest2 + " vez(es) no public TelaPrincipal()");
+//        System.out.println("Passou " + countTest2 + " vez(es) no public TelaPrincipal()");
         tableListSelectionListener();
+        try {
+            abrirConexao();
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(TelaPrincipal.class.getName());
+        }
+
         //Não mostrar tab "Protocolos" pois ainda não há nada implementado
         jTabbedPanePrincipal.removeTabAt(0);
 //Usado para setar o atalho do Copiar, porém não funciou... ainda.        
@@ -519,18 +534,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonBuscarRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarRegistrosActionPerformed
-        LocaisAction locaisAction = new LocaisAction();
+        LocaisAction locaisAction = new LocaisAction(statement);
         locaisAction.buscarNumeroRegistroLocais(jTableNumeroRegistro);
     }//GEN-LAST:event_jButtonBuscarRegistrosActionPerformed
 
     private void jButtonConsultarLocalPromVincActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultarLocalPromVincActionPerformed
-        LocaisAction locaisAction = new LocaisAction();
+        LocaisAction locaisAction = new LocaisAction(statement);
         locaisAction.consultarLocalAction(jTablePromotorVinculado, jTextFieldConsultarLocalPromVinc.getText());
     }//GEN-LAST:event_jButtonConsultarLocalPromVincActionPerformed
 
     private void jTextFieldConsultarLocalPromVincKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldConsultarLocalPromVincKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            LocaisAction locaisAction = new LocaisAction();
+            LocaisAction locaisAction = new LocaisAction(statement);
             locaisAction.consultarLocalAction(jTablePromotorVinculado, jTextFieldConsultarLocalPromVinc.getText());
         }
     }//GEN-LAST:event_jTextFieldConsultarLocalPromVincKeyPressed
@@ -623,6 +638,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     jTableGEDOC,
                     jTextAreaCadMastiff,
                     jTextAreaLotacaoUsuario,
+                    statement,
                     CAMPOUSUARIOCPF);
             
 
@@ -672,8 +688,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         return "Support Assistant - "+versao;
     }
 
+    private void abrirConexao() throws SQLException {
+        //criar variável para verificar se a conexão foi bem sucedida
+        conexao = ConexaoOracle.ObterConexao();
+        statement = conexao.createStatement();
+    }
     
-    
+   
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
