@@ -5,7 +5,6 @@
  */
 package Controle;
 
-import Conexao.ConexaoOracle;
 import Modelo.ConsultaUsuario;
 import Modelo.ConsultaUsuarioTableModel;
 import Modelo.Consultas;
@@ -15,7 +14,6 @@ import Modelo.ListarInfoGedocTableModel;
 import Modelo.LotacaoUsuarioSIMP;
 import Modelo.PermissaoMastiffUsuario;
 import Visao.TelaPrincipal;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -38,8 +36,6 @@ public class UsuariosAction {
 
     public static final int LOGINFOCUSLOST = 10;
     public static final int NOMEFOCUSLOST = 11;
-//    public static final int ATUALIZATUDO = 12;
-
     JTextField jTextFieldLogin;
     JTextField jTextFieldNome;
     JTextField jTextFieldMatricula;
@@ -52,6 +48,7 @@ public class UsuariosAction {
     JTable jTableGEDOC;
     int ultimoFocus;
     int chaveDosInfernos = 0;
+    Statement statement;
 
     public UsuariosAction(JTextField jTextFieldLogin,
             JTextField jTextFieldNome,
@@ -63,6 +60,7 @@ public class UsuariosAction {
             JTable jTableGEDOC,
             JTextArea jTextAreaCadMastiff, 
             JTextArea jTextAreaLotacaoUsuario, 
+            Statement statement,
             int ultimoFocus) {
 
         this.jTextFieldLogin = jTextFieldLogin;
@@ -75,6 +73,7 @@ public class UsuariosAction {
         this.jTextAreaLotacaoUsuario = jTextAreaLotacaoUsuario;
         this.jTableConsultaUsuario = jTableConsultaUsuario;
         this.jTableGEDOC = jTableGEDOC;
+        this.statement = statement;
         this.ultimoFocus = ultimoFocus;        
 
     }
@@ -87,10 +86,7 @@ public class UsuariosAction {
         paramConsulta = tratarParamSQL(paramConsulta);
 
         if (!(paramConsulta.equals(""))) {
-            Connection conexao;
             try {
-                conexao = ConexaoOracle.ObterConexao();
-                Statement statement = conexao.createStatement();
                 Consultas consulta = new Consultas();
                 // A PARTIR DAQUI, DEVE TRATAR QUAL CONSULTA SERÁ FEITA NO BANCO BASEADO 
                 // NO CAMPO QUE FOI INSERIDO O VALOR
@@ -155,12 +151,7 @@ public class UsuariosAction {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<PermissaoMastiffUsuario> listaPermissao = new ArrayList();
-        //NumeroRegistroTableModel tableModel = null;
-
-        Connection conexao;
         try {
-            conexao = ConexaoOracle.ObterConexao();
-            Statement statement = conexao.createStatement();
             Consultas consulta = new Consultas();
 
             consulta.consultarUsuarioPermissaoMastiff(login);
@@ -195,12 +186,8 @@ public class UsuariosAction {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<LotacaoUsuarioSIMP> listaLotacao = new ArrayList();
-        //NumeroRegistroTableModel tableModel = null;
 
-        Connection conexao;
         try {
-            conexao = ConexaoOracle.ObterConexao();
-            Statement statement = conexao.createStatement();
             Consultas consulta = new Consultas();
 
             consulta.consultarUsuarioLotacao(login);
@@ -231,26 +218,13 @@ public class UsuariosAction {
         }
     }
     
-//    public String converterArrayToString(ArrayList<PermissaoMastiffUsuario> array) {
-//        StringBuilder saidaString = new StringBuilder();
-//        array.forEach((txt) -> {
-//            saidaString.append(txt.getPermissaoMastiff());
-//            saidaString.append("\n");
-//        });
-//
-//        return saidaString.toString();
-//    }
-    
     public void listarInfoGedoc(String login) {
 
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<InfoGedoc> listaInfoGedoc = new ArrayList();
         if (!(login.equals(""))) {
-            Connection conexao;
             try {
-                conexao = ConexaoOracle.ObterConexao();
-                Statement statement = conexao.createStatement();
                 Consultas consulta = new Consultas();
                 // A PARTIR DAQUI, DEVE TRATAR QUAL CONSULTA SERÁ FEITA NO BANCO BASEADO 
                 // NO CAMPO QUE FOI INSERIDO O VALOR
@@ -328,18 +302,6 @@ public class UsuariosAction {
                 jTextFieldEmail.setText(jTableConsultaUsuario.getValueAt(linha, 4).toString());
                 jTextFieldCpf.setText(jTableConsultaUsuario.getValueAt(linha, 5).toString());
             }
-//            case ATUALIZATUDO: {
-
-//            }
-//            break;//            case ATUALIZATUDO: {
-//                jTextFieldLogin.setText(table.getValueAt(linha, 0).toString());
-//                jTextFieldNome.setText(table.getValueAt(linha, 1).toString());
-//                jTextFieldMatricula.setText(table.getValueAt(linha, 2).toString());
-//                jTextFieldVinculo.setText(table.getValueAt(linha, 3).toString());
-//                jTextFieldEmail.setText(table.getValueAt(linha, 4).toString());
-//                jTextFieldCpf.setText(table.getValueAt(linha, 5).toString());
-//            }
-//            break;
         }
         
         listarPermissaoUsuarioMastiff(jTableConsultaUsuario.getValueAt(linha, 0).toString());
