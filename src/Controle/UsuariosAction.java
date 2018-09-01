@@ -8,6 +8,7 @@ package Controle;
 import Modelo.ConsultaUsuario;
 import Modelo.ConsultaUsuarioTableModel;
 import Modelo.Consultas;
+import Modelo.CoordenadoriaUsuarioSIMP;
 import Modelo.InfoGedoc;
 import Modelo.ListarInfoGedocTableCellRenderer;
 import Modelo.ListarInfoGedocTableModel;
@@ -46,6 +47,7 @@ public class UsuariosAction {
     private JTextField jTextFieldCpf;
     private JTextArea jTextAreaCadMastiff;
     private JTextArea jTextAreaLotacaoUsuario;
+    private JTextArea jTextAreaCadCoordenador;
     private JTable jTableConsultaUsuario;
     private JTable jTableGEDOC;
 //    private int ultimoFocus;
@@ -88,6 +90,7 @@ public class UsuariosAction {
             JTable jTableGEDOC,
             JTextArea jTextAreaCadMastiff, 
             JTextArea jTextAreaLotacaoUsuario, 
+            JTextArea jTextAreaCadCoordenador, 
             Statement statement,
             int ultimoFocus) {
         System.out.println("Atribuindo valores às variàveis do construtor UsuariosAction: " + count1++ +" - total instanciado: " +totalObjInstanciados++);
@@ -99,6 +102,7 @@ public class UsuariosAction {
         this.jTextFieldCpf = jTextFieldCpf;
         this.jTextAreaCadMastiff = jTextAreaCadMastiff;
         this.jTextAreaLotacaoUsuario = jTextAreaLotacaoUsuario;
+        this.jTextAreaCadCoordenador = jTextAreaCadCoordenador;
         this.jTableConsultaUsuario = jTableConsultaUsuario;
         this.jTableGEDOC = jTableGEDOC;
         this.statement = statement;
@@ -242,7 +246,6 @@ public class UsuariosAction {
 
         try {
 //            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
-            consulta = new Consultas();
 
             consulta.consultarUsuarioLotacao(login);
             ResultSet resultSet = statement.executeQuery(consulta.getQuery());
@@ -267,6 +270,47 @@ public class UsuariosAction {
             });
             jTextAreaLotacaoUsuario.setText(saidaString.toString());
             jTextAreaLotacaoUsuario.moveCaretPosition(0); //mover o cursor para o início
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /** Coordenador usuário
+     * Listar locais onde o usuário está cadastrado como coordenador
+     * @param login 
+     */
+    public void listarCoordenadoiaUsuario(String login) {
+        final ResultSetMetaData metaRS;
+        final int columnCount;
+        ArrayList<CoordenadoriaUsuarioSIMP> listaCoordUsuario = new ArrayList();
+
+        try {
+//            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
+
+            consulta.consultarUsuarioCoordenador(login);
+            ResultSet resultSet = statement.executeQuery(consulta.getQuery());
+
+            metaRS = resultSet.getMetaData();
+            columnCount = metaRS.getColumnCount();
+
+            while (resultSet.next()) {
+                CoordenadoriaUsuarioSIMP coordenadoriaUsuarioSIMP = new CoordenadoriaUsuarioSIMP();
+                for (int i = 1; i <= columnCount; i++) {
+                    coordenadoriaUsuarioSIMP.setCoordenacao(resultSet.getString(i));
+                }
+                listaCoordUsuario.add(coordenadoriaUsuarioSIMP);
+            }
+            
+            //Mostrar lotação usuário
+            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
+            StringBuilder saidaString = new StringBuilder();
+            listaCoordUsuario.forEach((txt) -> {
+                saidaString.append(txt.getCoordenacao());
+                saidaString.append("\n");
+            });
+            jTextAreaCadCoordenador.setText(saidaString.toString());
+            jTextAreaCadCoordenador.moveCaretPosition(0); //mover o cursor para o início
            
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -387,10 +431,12 @@ public class UsuariosAction {
         if (!login.equals(getSemRegistroTxt())) {
             listarPermissaoUsuarioMastiff(jTableConsultaUsuario.getValueAt(linha, 0).toString());
             listarLotacaoUsuarioSIMP(jTableConsultaUsuario.getValueAt(linha, 0).toString());
+            listarCoordenadoiaUsuario(jTableConsultaUsuario.getValueAt(linha, 0).toString());
             listarInfoGedoc(jTableConsultaUsuario.getValueAt(linha, 0).toString());
         } else{
             jTextAreaCadMastiff.setText("");
             jTextAreaLotacaoUsuario.setText("");
+            jTextAreaCadCoordenador.setText("");
             ListarInfoGedocTableModel tableModel = new ListarInfoGedocTableModel();
                 jTableGEDOC.setModel(tableModel);
         }

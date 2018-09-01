@@ -172,6 +172,22 @@ public class Consultas {
         setQuery(consulta.toString());
     }
     
+    public void consultarUsuarioCoordenador(String login) {
+        StringBuilder consulta = new StringBuilder();
+
+        consulta.append("SELECT b.DESCRICAO "
+                + "FROM 	MPPA.LOCALCOORDENADOR a, "
+                + "		MPPA.LOCAL b, "
+                + "		MPPA.USUARIO c "
+                + "WHERE 	a.IDLOCAL = b.IDLOCAL "
+                + "AND		a.IDUSUARIO = c.IDUSUARIO "
+                + "AND 	c.LOGIN LIKE '");
+        consulta.append(login);
+        consulta.append("'");
+
+        setQuery(consulta.toString());
+    }
+    
     public void consultarUsuarioGedoc(String login) {
         StringBuilder consulta = new StringBuilder();
 
