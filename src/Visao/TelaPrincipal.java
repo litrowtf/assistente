@@ -280,6 +280,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel7.setText("CPF:");
 
         jTextFieldLogin.setBackground(new java.awt.Color(254, 255, 217));
+        jTextFieldLogin.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldLoginFocusGained(evt);
+            }
+        });
         jTextFieldLogin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldLoginKeyPressed(evt);
@@ -288,6 +293,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTextFieldNome.setBackground(new java.awt.Color(254, 255, 217));
         jTextFieldNome.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jTextFieldNome.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldNomeFocusGained(evt);
+            }
+        });
         jTextFieldNome.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldNomeKeyPressed(evt);
@@ -295,6 +305,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jTextFieldMatricula.setBackground(new java.awt.Color(254, 255, 217));
+        jTextFieldMatricula.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldMatriculaFocusGained(evt);
+            }
+        });
         jTextFieldMatricula.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldMatriculaKeyPressed(evt);
@@ -303,11 +318,26 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTextFieldVinculo.setEditable(false);
         jTextFieldVinculo.setBackground(new java.awt.Color(254, 254, 254));
+        jTextFieldVinculo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldVinculoFocusGained(evt);
+            }
+        });
 
         jTextFieldEmail.setEditable(false);
         jTextFieldEmail.setBackground(new java.awt.Color(254, 254, 254));
+        jTextFieldEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldEmailFocusGained(evt);
+            }
+        });
 
         jTextFieldCPF.setBackground(new java.awt.Color(254, 255, 217));
+        jTextFieldCPF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldCPFFocusGained(evt);
+            }
+        });
         jTextFieldCPF.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldCPFKeyPressed(evt);
@@ -597,6 +627,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jTableGEDOCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTableGEDOCFocusLost
         setUtimoFoco(this.getClass().getDeclaredFields()[49].getName()); //49 é o ID do jTableGEDOC
     }//GEN-LAST:event_jTableGEDOCFocusLost
+
+    private void jTextFieldLoginFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldLoginFocusGained
+        jTextFieldLogin.selectAll();
+    }//GEN-LAST:event_jTextFieldLoginFocusGained
+
+    private void jTextFieldNomeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldNomeFocusGained
+        jTextFieldNome.selectAll();
+    }//GEN-LAST:event_jTextFieldNomeFocusGained
+
+    private void jTextFieldMatriculaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldMatriculaFocusGained
+        jTextFieldMatricula.selectAll();
+    }//GEN-LAST:event_jTextFieldMatriculaFocusGained
+
+    private void jTextFieldVinculoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldVinculoFocusGained
+        jTextFieldVinculo.selectAll();
+    }//GEN-LAST:event_jTextFieldVinculoFocusGained
+
+    private void jTextFieldEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldEmailFocusGained
+        jTextFieldEmail.selectAll();
+    }//GEN-LAST:event_jTextFieldEmailFocusGained
+
+    private void jTextFieldCPFFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldCPFFocusGained
+        jTextFieldCPF.selectAll();
+    }//GEN-LAST:event_jTextFieldCPFFocusGained
 
     private String validaString(Object objeto) {
         if (objeto != null) {

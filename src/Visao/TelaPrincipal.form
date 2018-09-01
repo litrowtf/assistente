@@ -505,6 +505,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldLoginFocusGained"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldLoginKeyPressed"/>
                       </Events>
                     </Component>
@@ -518,6 +519,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldNomeFocusGained"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldNomeKeyPressed"/>
                       </Events>
                     </Component>
@@ -528,6 +530,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldMatriculaFocusGained"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldMatriculaKeyPressed"/>
                       </Events>
                     </Component>
@@ -538,6 +541,9 @@
                           <Color blue="fe" green="fe" red="fe" type="rgb"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldVinculoFocusGained"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldEmail">
                       <Properties>
@@ -546,6 +552,9 @@
                           <Color blue="fe" green="fe" red="fe" type="rgb"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldEmailFocusGained"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTextFieldCPF">
                       <Properties>
@@ -554,6 +563,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTextFieldCPFFocusGained"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldCPFKeyPressed"/>
                       </Events>
                     </Component>
