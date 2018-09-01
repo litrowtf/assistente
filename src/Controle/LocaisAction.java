@@ -23,31 +23,40 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 /**
  *
- * @author leandro
+ * @author leandro Carraga as informações dos usuários
  */
 public class LocaisAction {
+
     Statement statement;
-    
-    public LocaisAction(Statement statement){
+
+    /**
+     *
+     * @param statement
+     */
+    public LocaisAction(Statement statement) {
         this.statement = statement;
     }
 
+    /**
+     *
+     * @param table
+     */
     public void buscarNumeroRegistroLocais(JTable table) {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<NumeroRegistro> numRegLista = new ArrayList();
-        NumeroRegistroTableModel tableModel = null;
+        NumeroRegistroTableModel tableModel;
+        ResultSet resultSet = null;
 
         try {
             Consultas consulta = new Consultas();
 
             consulta.selecionarConsulta(Consultas.REGISTRODISPONIVEL);
-            ResultSet resultSet = statement.executeQuery(consulta.getQuery());
+            resultSet = statement.executeQuery(consulta.getQuery());
 
             metaRS = resultSet.getMetaData();
             columnCount = metaRS.getColumnCount();
@@ -60,35 +69,42 @@ public class LocaisAction {
                 numRegLista.add(numeroRegistro);
             }
 
-            if (tableModel == null) {
-                tableModel = new NumeroRegistroTableModel(numRegLista);
-                table.setModel(tableModel);
-            } else {
-                JOptionPane.showMessageDialog(null, "O tableModel do método "
-                        + "'buscarNumeroRegistroLocais' \n"
-                        + "não foi atualizado ",
-                        "tableModel Inválido", JOptionPane.WARNING_MESSAGE);
-            }
-
+            tableModel = new NumeroRegistroTableModel(numRegLista);
+            table.setModel(tableModel);
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, e);
+            }
+//            try { if(statement != null) statement.close(); } catch (SQLException e) {Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, e);}
         }
     }
 
+    /**
+     *
+     * @param table
+     * @param local Realiza o procedimento para capiturar o promotores
+     * vinculados ao local.
+     */
     public void consultarLocalAction(JTable table, String local) {
         // TODO add your handling code here:
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<PromotorVinculado> promotorVinculadoLista = new ArrayList();
-        PromotorVinculadoTableModel tableModel = null;
+        PromotorVinculadoTableModel tableModel;
         String paramLocal = tratarParamSQL(local);
+        ResultSet resultSet = null;
 
         if (!(paramLocal.equals(""))) {
             try {
                 Consultas consulta = new Consultas();
-
                 consulta.selecionarConsulta(Consultas.PROMOTORVINCULADO, paramLocal);
-                ResultSet resultSet = statement.executeQuery(consulta.getQuery());
+                resultSet = statement.executeQuery(consulta.getQuery());
 
                 metaRS = resultSet.getMetaData();
                 columnCount = metaRS.getColumnCount();
@@ -112,24 +128,34 @@ public class LocaisAction {
                             case COMARCA:
                                 promotorVinculado.setDescComarca(resultSet.getString(i));
                                 break;
+                            default:
+                                System.out.println("método consultarLocalAction \n Case: default");
+                                break;
+
                         }
                     }
                     promotorVinculadoLista.add(promotorVinculado); //Adiciona as linhas da tabela no Array promotorVinculadoLista
                 }
 
-                if (tableModel == null) {
-                    tableModel = new PromotorVinculadoTableModel(promotorVinculadoLista);
-                    table.setModel(tableModel);
-                    table.getColumnModel().getColumn(0).setPreferredWidth(190);
-                    table.getColumnModel().getColumn(1).setPreferredWidth(500);
-                    table.getColumnModel().getColumn(2).setPreferredWidth(170);
-                    table.getColumnModel().getColumn(3).setPreferredWidth(500);
-                    table.getColumnModel().getColumn(4).setPreferredWidth(250);
-
-                }
+                tableModel = new PromotorVinculadoTableModel(promotorVinculadoLista);
+                table.setModel(tableModel);
+                table.getColumnModel().getColumn(0).setPreferredWidth(190);
+                table.getColumnModel().getColumn(1).setPreferredWidth(500);
+                table.getColumnModel().getColumn(2).setPreferredWidth(170);
+                table.getColumnModel().getColumn(3).setPreferredWidth(500);
+                table.getColumnModel().getColumn(4).setPreferredWidth(250);
 
             } catch (SQLException ex) {
                 Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                try {
+                    if (resultSet != null) {
+                        resultSet.close();
+                    }
+                } catch (SQLException e) {
+                    Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, e);
+                }
+//            try { if(statement != null) statement.close(); } catch (SQLException e) {Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, e);}
             }
         }
     }

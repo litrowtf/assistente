@@ -21,33 +21,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.JTextArea;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author leandro
  */
 public class UsuariosAction {
-
     public static final int LOGINFOCUSLOST = 10;
     public static final int NOMEFOCUSLOST = 11;
-    JTextField jTextFieldLogin;
-    JTextField jTextFieldNome;
-    JTextField jTextFieldMatricula;
-    JTextField jTextFieldVinculo;
-    JTextField jTextFieldEmail;
-    JTextField jTextFieldCpf;
-    JTextArea jTextAreaCadMastiff;
-    JTextArea jTextAreaLotacaoUsuario;
-    JTable jTableConsultaUsuario;
-    JTable jTableGEDOC;
-    int ultimoFocus;
-    int count1 = 0, 
+    private JTextField jTextFieldLogin;
+    private JTextField jTextFieldNome;
+    private JTextField jTextFieldMatricula;
+    private JTextField jTextFieldVinculo;
+    private JTextField jTextFieldEmail;
+    private JTextField jTextFieldCpf;
+    private JTextArea jTextAreaCadMastiff;
+    private JTextArea jTextAreaLotacaoUsuario;
+    private JTable jTableConsultaUsuario;
+    private JTable jTableGEDOC;
+//    private int ultimoFocus;
+    private int count1 = 0, 
             count2 = 0, 
             count3 = 0, 
             count4 = 0,
@@ -57,9 +59,25 @@ public class UsuariosAction {
             count8 = 0,
             count9 = 0,
             totalObjInstanciados = 0;
-    int chaveDosInfernos = 0;
-    Statement statement;
+    private Statement statement;
+    private Consultas consulta;
 
+    /**
+     * 
+     * @param jTextFieldLogin
+     * @param jTextFieldNome
+     * @param jTextFieldMatricula
+     * @param jTextFieldVinculo
+     * @param jTextFieldEmail
+     * @param jTextFieldCpf
+     * @param jTableConsultaUsuario
+     * @param jTableGEDOC
+     * @param jTextAreaCadMastiff
+     * @param jTextAreaLotacaoUsuario
+     * @param statement
+     * @param ultimoFocus 
+     */
+    
     public UsuariosAction(JTextField jTextFieldLogin,
             JTextField jTextFieldNome,
             JTextField jTextFieldMatricula,
@@ -84,19 +102,30 @@ public class UsuariosAction {
         this.jTableConsultaUsuario = jTableConsultaUsuario;
         this.jTableGEDOC = jTableGEDOC;
         this.statement = statement;
-        this.ultimoFocus = ultimoFocus;        
+//        this.ultimoFocus = ultimoFocus;
+        
 
+            consulta = new Consultas();
+            
     }
 
-    public void consultarUsuario(String paramConsulta, int campoConsultado) {
+    
+    
+    /**
+     * Consulta usuário.
+     * @param paramConsulta
+     * @param campoConsultado 
+     */
+    
+    public void consultarUsuarioAction(String paramConsulta, int campoConsultado) {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<ConsultaUsuario> consultaUsuarioLista = new ArrayList();
         paramConsulta = tratarParamSQL(paramConsulta);
-
+        
         if (!(paramConsulta.equals(""))) {
             try {
-                Consultas consulta = new Consultas();
+//                Consulta consulta = new Consultas();
                 // A PARTIR DAQUI, DEVE TRATAR QUAL CONSULTA SERÁ FEITA NO BANCO BASEADO 
                 // NO CAMPO QUE FOI INSERIDO O VALOR
                 consulta.selecionarConsulta(Consultas.CONSULTARUSUARIO, paramConsulta, campoConsultado);
@@ -128,6 +157,9 @@ public class UsuariosAction {
                             case 6:
                                 consultaUsuario.setCpf(resultSet.getString(i));
                                 break;
+                            default:
+                                System.out.println("método consultarUsuarioAction \n Case: default");
+                                break;
                         }
                     }
                     consultaUsuarioLista.add(consultaUsuario); //Adiciona as linhas da tabela no Array promotorVinculadoLista
@@ -147,7 +179,7 @@ public class UsuariosAction {
                 if (jTableConsultaUsuario.getRowCount() > 0) { //Verificar se ha registro na tabela
                     jTableConsultaUsuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //seta propriedade para selecionar apenas uma linha                    
                     jTableConsultaUsuario.setRowSelectionInterval(0, 0);//selecionar a primeira linha
-                    atualizarCamposTabUsuario(jTableConsultaUsuario.getSelectedRow(), campoConsultado);
+//                    atualizarCamposTabUsuario(jTableConsultaUsuario.getSelectedRow(), campoConsultado);
                     jTableConsultaUsuario.requestFocus();
                 }
                 
@@ -157,13 +189,17 @@ public class UsuariosAction {
         }
     }
     
+    /**Permissão Mastiff
+     * Consular permissões do usuário no Mastiff.
+     * @param login 
+     */
     public void listarPermissaoUsuarioMastiff(String login) {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<PermissaoMastiffUsuario> listaPermissao = new ArrayList();
         try {
-            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
-            Consultas consulta = new Consultas();
+//            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
+//            Consulta consulta = new Consultas();
 
             consulta.consultarUsuarioPermissaoMastiff(login);
             ResultSet resultSet = statement.executeQuery(consulta.getQuery());
@@ -195,14 +231,18 @@ public class UsuariosAction {
         }
     }
     
+    /**Lotação usuário
+     * Lista os locais onde  usuário está lotado.
+     * @param login 
+     */
     public void listarLotacaoUsuarioSIMP(String login) {
         final ResultSetMetaData metaRS;
         final int columnCount;
         ArrayList<LotacaoUsuarioSIMP> listaLotacao = new ArrayList();
 
         try {
-            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
-            Consultas consulta = new Consultas();
+//            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
+            consulta = new Consultas();
 
             consulta.consultarUsuarioLotacao(login);
             ResultSet resultSet = statement.executeQuery(consulta.getQuery());
@@ -233,6 +273,10 @@ public class UsuariosAction {
         }
     }
     
+    /**Listar informações GEDOC
+     * Lista idUsuario, idLotação, desccrição da lotação, habilitação para despacho e habilitação para distribuição.
+     * @param login 
+     */
     public void listarInfoGedoc(String login) {
 
         final ResultSetMetaData metaRS;
@@ -240,8 +284,8 @@ public class UsuariosAction {
         ArrayList<InfoGedoc> listaInfoGedoc = new ArrayList();
         if (!(login.equals(""))) {
             try {
-                System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
-                Consultas consulta = new Consultas();
+//                System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
+//                Consulta consulta = new Consultas();
                 // A PARTIR DAQUI, DEVE TRATAR QUAL CONSULTA SERÁ FEITA NO BANCO BASEADO 
                 // NO CAMPO QUE FOI INSERIDO O VALOR
                 consulta.consultarUsuarioGedoc(login);
@@ -270,6 +314,10 @@ public class UsuariosAction {
                             case 5:
                                 infoGedoc.setDistribuir(resultSet.getBoolean(i));
                                 break;
+                            default:
+                                System.out.println("método listaInfoGedoc \n Case: default");
+                                break;
+                            
                         }
                     }
                     listaInfoGedoc.add(infoGedoc); //Adiciona as linhas da tabela no Array promotorVinculadoLista
@@ -293,39 +341,63 @@ public class UsuariosAction {
         }
     }
 
-    //USAR ESTE MÉTODO PARA ATUALIZAR TODOS OS CAMPOS A TELA
+    /**
+     * Atualizar todos os campos da tela
+     * @param linha
+     * @param ultimoFocus 
+     */
     public void atualizarCamposTabUsuario(int linha, int ultimoFocus) {
+        
+        String login, nome, matricula, vinculo, email, cpf;
+        
+        login = jTableConsultaUsuario.getValueAt(linha, 0) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 0).toString();
+        nome = jTableConsultaUsuario.getValueAt(linha, 1) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 1).toString();
+        matricula = jTableConsultaUsuario.getValueAt(linha, 2) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 2).toString();
+        vinculo = jTableConsultaUsuario.getValueAt(linha, 3) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 3).toString();
+        email = jTableConsultaUsuario.getValueAt(linha, 4) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 4).toString();
+        cpf = jTableConsultaUsuario.getValueAt(linha, 5) == null ? getSemRegistroTxt() : jTableConsultaUsuario.getValueAt(linha, 5).toString();
+
+        
         switch (ultimoFocus) {
             case LOGINFOCUSLOST: {
-                jTextFieldNome.setText(jTableConsultaUsuario.getValueAt(linha, 1).toString());
-                jTextFieldMatricula.setText(jTableConsultaUsuario.getValueAt(linha, 2).toString());
-                jTextFieldVinculo.setText(jTableConsultaUsuario.getValueAt(linha, 3).toString());
-                jTextFieldEmail.setText(jTableConsultaUsuario.getValueAt(linha, 4).toString());
-                jTextFieldCpf.setText(jTableConsultaUsuario.getValueAt(linha, 5).toString());
+                jTextFieldNome.setText(nome);
+                jTextFieldMatricula.setText(matricula);
+                jTextFieldVinculo.setText(vinculo);
+                jTextFieldEmail.setText(email);
+                jTextFieldCpf.setText(cpf);
             }
             break;
             case NOMEFOCUSLOST: {
-                jTextFieldLogin.setText(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-                jTextFieldMatricula.setText(jTableConsultaUsuario.getValueAt(linha, 2).toString());
-                jTextFieldVinculo.setText(jTableConsultaUsuario.getValueAt(linha, 3).toString());
-                jTextFieldEmail.setText(jTableConsultaUsuario.getValueAt(linha, 4).toString());
-                jTextFieldCpf.setText(jTableConsultaUsuario.getValueAt(linha, 5).toString());
+                jTextFieldLogin.setText(login);
+                jTextFieldMatricula.setText(matricula);
+                jTextFieldVinculo.setText(vinculo);
+                jTextFieldEmail.setText(email);
+                jTextFieldCpf.setText(cpf);
             }
             break;
             default:{
-                jTextFieldLogin.setText(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-                jTextFieldNome.setText(jTableConsultaUsuario.getValueAt(linha, 1).toString());
-                jTextFieldMatricula.setText(jTableConsultaUsuario.getValueAt(linha, 2).toString());
-                jTextFieldVinculo.setText(jTableConsultaUsuario.getValueAt(linha, 3).toString());
-                jTextFieldEmail.setText(jTableConsultaUsuario.getValueAt(linha, 4).toString());
-                jTextFieldCpf.setText(jTableConsultaUsuario.getValueAt(linha, 5).toString());
+                jTextFieldLogin.setText(login);
+                jTextFieldNome.setText(nome);
+                jTextFieldMatricula.setText(matricula);
+                jTextFieldVinculo.setText(vinculo);
+                jTextFieldEmail.setText(email);
+                jTextFieldCpf.setText(cpf);
             }
         }
-        
-        listarPermissaoUsuarioMastiff(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-        listarLotacaoUsuarioSIMP(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-        listarInfoGedoc(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-
+        if (!login.equals(getSemRegistroTxt())) {
+            listarPermissaoUsuarioMastiff(jTableConsultaUsuario.getValueAt(linha, 0).toString());
+            listarLotacaoUsuarioSIMP(jTableConsultaUsuario.getValueAt(linha, 0).toString());
+            listarInfoGedoc(jTableConsultaUsuario.getValueAt(linha, 0).toString());
+        } else{
+            jTextAreaCadMastiff.setText("");
+            jTextAreaLotacaoUsuario.setText("");
+            ListarInfoGedocTableModel tableModel = new ListarInfoGedocTableModel();
+                jTableGEDOC.setModel(tableModel);
+        }
+    }
+    
+    public String getSemRegistroTxt(){
+        return "Sem registro";
     }
 
     private String tratarParamSQL(String parametro) {

@@ -37,7 +37,12 @@ public class Consultas {
     }
 
     
-    //esse método servirá para selecionar a consulta dependendo da opção escolhida
+    /** Selecionar Consulta.
+     * Esse método servirá para selecionar a consulta dependendo da opção escolhida
+     * @param opcao
+     * @param param1
+     * @param tipoConsulta 
+     */
     public void selecionarConsulta(int opcao, String param1, int tipoConsulta) {
         switch (opcao) {
 
@@ -50,11 +55,14 @@ public class Consultas {
                 promotorVinculadoLocal(param1);
                 break;
             }
-            
+
             case CONSULTARUSUARIO: {
                 consultarUsuarios(param1, tipoConsulta);
                 break;
             }
+            default:
+                System.out.println("método selecionarConsulta \n Case: default");
+                break;
 
         }
     }
@@ -97,7 +105,7 @@ public class Consultas {
                         + "         VSER_CD_MATRICULA, "
                         + "         VSER_TIPO_FUNC, "
                         + "         decode(VSER_CD_TIPO, 'E', 'estagiario@mppa.mp.br', 'F', 'estagiario@mppa.mp.br', VSER_EMAIL) e_mail, "
-                        + "         VSER_CPF "
+                        + "         regexp_replace(LPAD(VSER_CPF, 11, 0),'([0-9]{3})([0-9]{3})([0-9]{3})','\\1.\\2.\\3-') VSER_CPF "
                         + "FROM     INTEGRACAO_SQLSERVER.Tab_Pessoagolrh "
                         + "WHERE    VSER_CD_SITUACAO = 'A' ");
         

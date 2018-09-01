@@ -14,21 +14,26 @@ import java.sql.SQLException;
  * @author leandro
  */
 public class ConexaoOracle {
-      
-    public static Connection ObterConexao() throws SQLException{
-        Connection conexao = null;
+    
+    /**
+     * Cria conexão com banco.
+     * @return
+     * @throws SQLException 
+     */
+    public static Connection obterConexao() throws SQLException{
+        Connection conexao;
         
         try{
             Class.forName("oracle.jdbc.driver.OracleDriver");
             
             conexao = DriverManager.getConnection(
                     "jdbc:oracle:thin:@//192.168.150.241:1521/racmppa.mppa.mp.br","ASSISTENTE_SUPORTE","R@CMpP@$up0rtE");
-            
+            return conexao;
         } catch(ClassNotFoundException | SQLException e){
             e.printStackTrace();
         }
         
-        return conexao;
+        return null;
     }
     
 }

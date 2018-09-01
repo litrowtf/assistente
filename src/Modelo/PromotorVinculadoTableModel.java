@@ -25,12 +25,12 @@ public class PromotorVinculadoTableModel extends AbstractTableModel {
     
     // Cria um NumeroRegistroTableModel sem nenhuma linha
     public PromotorVinculadoTableModel() {
-        linhas = new ArrayList<PromotorVinculado>();
+        linhas = new ArrayList<>();
     }
 
     // Construtor contendo a Array dos dados que serão apresentados, recebida por parâmetro
     public PromotorVinculadoTableModel(ArrayList<PromotorVinculado> promotorVinculado) {
-        linhas = new ArrayList<PromotorVinculado>(promotorVinculado);
+        linhas = new ArrayList<>(promotorVinculado);
     }
     
 

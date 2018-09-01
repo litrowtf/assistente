@@ -25,7 +25,7 @@ class ExibirResultadoConsole {
         final int columnCount;
         final Map<String, String> fieldsValues = new HashMap<>();
 
-        Connection conexao = ConexaoOracle.ObterConexao();
+        Connection conexao = ConexaoOracle.obterConexao();
 
         Statement statement = conexao.createStatement();
 

@@ -8,12 +8,10 @@ package Visao;
 import Conexao.ConexaoOracle;
 import Controle.LocaisAction;
 import Controle.UsuariosAction;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,15 +44,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private int countTest2 = 0;
     private int countTest3 = 0;
     private String utimoFoco = "";
-    private static URL caminhoImagem;
-    private String versao = "Alpha V1.2";
+    private String versao;
     private Connection conexao;
     private Statement statement;
-    
 
     public TelaPrincipal() {
         initComponents();
-        countTest2++;
+        setIcon();
 //        System.out.println("Passou " + countTest2 + " vez(es) no public TelaPrincipal()");
         tableListSelectionListener();
         try {
@@ -549,7 +545,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void jTextFieldLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldLoginKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             evtjTextFieldUsuarioKeyPressed(jTextFieldLogin.getText(), CAMPOUSUARIOLOGIN);
-        }     
+        }
     }//GEN-LAST:event_jTextFieldLoginKeyPressed
 
     private void jTextFieldNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldNomeKeyPressed
@@ -560,7 +556,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void jTextFieldMatriculaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldMatriculaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            evtjTextFieldUsuarioKeyPressed(jTextFieldMatricula.getText(), CAMPOUSUARIOMATRICULA);   
+            evtjTextFieldUsuarioKeyPressed(jTextFieldMatricula.getText(), CAMPOUSUARIOMATRICULA);
         }
     }//GEN-LAST:event_jTextFieldMatriculaKeyPressed
 
@@ -576,8 +572,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItemCopiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopiarActionPerformed
-        if ((jTableConsultaUsuario.getSelectedRow() < 0 || jTableConsultaUsuario.getSelectedColumn() < 0) && 
-                (jTableGEDOC.getSelectedRow() < 0 || jTableGEDOC.getSelectedColumn() < 0)) {
+        if ((jTableConsultaUsuario.getSelectedRow() < 0 || jTableConsultaUsuario.getSelectedColumn() < 0)
+                && (jTableGEDOC.getSelectedRow() < 0 || jTableGEDOC.getSelectedColumn() < 0)) {
             JOptionPane.showMessageDialog(this, "Nenhuma célula foi selecionada.", "Atenção", JOptionPane.WARNING_MESSAGE);
         } else {
             if (getUtimoFoco().equals(this.getClass().getDeclaredFields()[48].getName())) { // pega nome do componente jTableConsultaUsuario
@@ -595,7 +591,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 //        for(int i = 0; i <= this.getClass().getDeclaredFields().length ; i++){
 //            System.out.println(this.getClass().getDeclaredFields()[i].getName() + i);
 //        }
-        
+
     }//GEN-LAST:event_jTableConsultaUsuarioFocusLost
 
     private void jTableGEDOCFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTableGEDOCFocusLost
@@ -608,52 +604,45 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
         return "";
     }
-    
-    private void copyToClipboard(String texto){
+
+    private void copyToClipboard(String texto) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(texto);
         clipboard.setContents(selection, null);
     }
-    
+
     private void evtjTextFieldUsuarioKeyPressed(String parametroConsulta, int campo) {
             usuarioAction = new UsuariosAction(jTextFieldLogin,
-                    jTextFieldNome,
-                    jTextFieldMatricula,
-                    jTextFieldVinculo,
-                    jTextFieldEmail,
-                    jTextFieldCPF,
-                    jTableConsultaUsuario,
-                    jTableGEDOC,
-                    jTextAreaCadMastiff,
-                    jTextAreaLotacaoUsuario,
-                    statement,
-                    CAMPOUSUARIOCPF);
-            
+                jTextFieldNome,
+                jTextFieldMatricula,
+                jTextFieldVinculo,
+                jTextFieldEmail,
+                jTextFieldCPF,
+                jTableConsultaUsuario,
+                jTableGEDOC,
+                jTextAreaCadMastiff,
+                jTextAreaLotacaoUsuario,
+                statement,
+                CAMPOUSUARIOCPF);
 
-            usuarioAction.consultarUsuario(parametroConsulta, campo);
+        usuarioAction.consultarUsuarioAction(parametroConsulta, campo);
     }
-    
+
     /**
-     * @param args the command line arguments
+     * 
      */
-    
     private void tableListSelectionListener() {
         jTableConsultaUsuario.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (e.getValueIsAdjusting()) {
-//                    countTest1++; 
-//                    System.out.println("Passou "+countTest1+ " vez(es) no public void valueChanged(ListSelectionEvent e){ if (e.getValueIsAdjusting())");
                     return;
                 }
-//                System.out.println("Teste da condição if(usuarioAction != null){" + (usuarioAction != null));
                 if (usuarioAction != null) {
 //                    System.out.println("entrou!");
-                    usuarioAction.atualizarCamposTabUsuario((jTableConsultaUsuario.getSelectedRow() == -1) ? 
-                                                            0 : jTableConsultaUsuario.getSelectedRow(), 10); //10 é o LOGINFOCUSLOST da UsuarioAction
+                    usuarioAction.atualizarCamposTabUsuario((jTableConsultaUsuario.getSelectedRow() == -1)
+                            ? 0 : jTableConsultaUsuario.getSelectedRow(), 12); //10 é o LOGINFOCUSLOST da UsuarioAction
                 }
-//                countTest3++;
-//                    System.out.println("Passou "+countTest3+ " vez(es) no public void valueChanged(ListSelectionEvent e){ fora do if");
             }
         });
     }
@@ -666,28 +655,33 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.utimoFoco = utimoFoco;
     }
     
-    //pega imagem do ícone do programa
-    private Image getIcon() {
-        caminhoImagem = this.getClass().getClassLoader().getResource("log.png");
-        return Toolkit.getDefaultToolkit().getImage(caminhoImagem);
-    }
-
+    /**
+     * 
+     * @return Nome do programa com o número da versão.
+     */
     public String getVersao() {
-        return "Support Assistant - "+versao;
+        versao = "Alpha V1.3";
+        
+        return "Assistente de Suporte - " + versao;
     }
 
     private void abrirConexao() throws SQLException {
         //criar variável para verificar se a conexão foi bem sucedida
         if (conexao == null) {
-            conexao = ConexaoOracle.ObterConexao();
+            conexao = ConexaoOracle.obterConexao();
             statement = conexao.createStatement();
-        } else{
+        } else {
             statement = conexao.createStatement();
         }
     }
-    
-   
-    
+/**
+ * Setar ícone.
+ */
+    private void setIcon() {
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Arquivos/log2.jpg")));
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -701,19 +695,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(TelaPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
+        //</editor-fold>
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new TelaPrincipal().setVisible(true);
             }
