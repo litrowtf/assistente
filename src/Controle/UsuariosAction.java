@@ -14,6 +14,7 @@ import Modelo.ListarInfoGedocTableCellRenderer;
 import Modelo.ListarInfoGedocTableModel;
 import Modelo.LotacaoUsuarioSIMP;
 import Modelo.PermissaoMastiffUsuario;
+import Modelo.RegraMastiffUsuario;
 import Visao.TelaPrincipal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -46,6 +47,7 @@ public class UsuariosAction {
     private JTextField jTextFieldEmail;
     private JTextField jTextFieldCpf;
     private JTextArea jTextAreaCadMastiff;
+    private JTextArea jTextAreaRegraMastiff;
     private JTextArea jTextAreaLotacaoUsuario;
     private JTextArea jTextAreaCadCoordenador;
     private JTable jTableConsultaUsuario;
@@ -75,7 +77,9 @@ public class UsuariosAction {
      * @param jTableConsultaUsuario
      * @param jTableGEDOC
      * @param jTextAreaCadMastiff
+     * @param jTextAreaRegraMastiff
      * @param jTextAreaLotacaoUsuario
+     * @param jTextAreaCadCoordenador
      * @param statement
      * @param ultimoFocus 
      */
@@ -89,6 +93,7 @@ public class UsuariosAction {
             JTable jTableConsultaUsuario,
             JTable jTableGEDOC,
             JTextArea jTextAreaCadMastiff, 
+            JTextArea jTextAreaRegraMastiff, 
             JTextArea jTextAreaLotacaoUsuario, 
             JTextArea jTextAreaCadCoordenador, 
             Statement statement,
@@ -101,6 +106,7 @@ public class UsuariosAction {
         this.jTextFieldEmail = jTextFieldEmail;
         this.jTextFieldCpf = jTextFieldCpf;
         this.jTextAreaCadMastiff = jTextAreaCadMastiff;
+        this.jTextAreaRegraMastiff = jTextAreaRegraMastiff;
         this.jTextAreaLotacaoUsuario = jTextAreaLotacaoUsuario;
         this.jTextAreaCadCoordenador = jTextAreaCadCoordenador;
         this.jTableConsultaUsuario = jTableConsultaUsuario;
@@ -212,7 +218,7 @@ public class UsuariosAction {
             columnCount = metaRS.getColumnCount();
 
             while (resultSet.next()) {
-                System.out.println("Quantas vezes PermissaoMastiffUsuario() foi instanciado: " + count4++ +" - total instanciado: " +totalObjInstanciados++);
+//                System.out.println("Quantas vezes PermissaoMastiffUsuario() foi instanciado: " + count4++ +" - total instanciado: " +totalObjInstanciados++);
                 PermissaoMastiffUsuario permissaoMastiffUsuario = new PermissaoMastiffUsuario();
                 for (int i = 1; i <= columnCount; i++) {
                     permissaoMastiffUsuario.setPermissaoMastiff(resultSet.getString(i));
@@ -221,7 +227,7 @@ public class UsuariosAction {
             }
             
             //Mostrar permissões Mastiff
-            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
+//            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
             StringBuilder saidaString = new StringBuilder();
             listaPermissao.forEach((txt) -> {
                 saidaString.append(txt.getPermissaoMastiff());
@@ -229,6 +235,48 @@ public class UsuariosAction {
             });
             jTextAreaCadMastiff.setText(saidaString.toString());
             jTextAreaCadMastiff.moveCaretPosition(0); //mover o cursor para o início
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**Permissão Mastiff
+     * Consular permissões do usuário no Mastiff.
+     * @param login 
+     */
+    public void listarRegraUsuarioMastiff(String login) {
+        final ResultSetMetaData metaRS;
+        final int columnCount;
+        ArrayList<RegraMastiffUsuario> listaRegra = new ArrayList();
+        try {
+//            System.out.println("Quantas vezes Consultas() foi instanciado: " + count3++ +" - total instanciado: " +totalObjInstanciados++);
+//            Consulta consulta = new Consultas();
+
+            consulta.consultarUsuarioRegraMastiff(login);
+            ResultSet resultSet = statement.executeQuery(consulta.getQuery());
+
+            metaRS = resultSet.getMetaData();
+            columnCount = metaRS.getColumnCount();
+
+            while (resultSet.next()) {
+//                System.out.println("Quantas vezes PermissaoMastiffUsuario() foi instanciado: " + count4++ +" - total instanciado: " +totalObjInstanciados++);
+                RegraMastiffUsuario regraMastiffUsuario = new RegraMastiffUsuario();
+                for (int i = 1; i <= columnCount; i++) {
+                    regraMastiffUsuario.setRegraMastiff(resultSet.getString(i));
+                }
+                listaRegra.add(regraMastiffUsuario);
+            }
+            
+            //Mostrar permissões Mastiff
+//            System.out.println("Quantas vezes StringBuilder() foi instanciado: " + count5++ +" - total instanciado: " +totalObjInstanciados++);
+            StringBuilder saidaString = new StringBuilder();
+            listaRegra.forEach((txt) -> {
+                saidaString.append(txt.getRegraMastiff());
+                saidaString.append("\n");
+            });
+            jTextAreaRegraMastiff.setText(saidaString.toString());
+            jTextAreaRegraMastiff.moveCaretPosition(0); //mover o cursor para o início
            
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
@@ -429,12 +477,14 @@ public class UsuariosAction {
             }
         }
         if (!login.equals(getSemRegistroTxt())) {
-            listarPermissaoUsuarioMastiff(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-            listarLotacaoUsuarioSIMP(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-            listarCoordenadoiaUsuario(jTableConsultaUsuario.getValueAt(linha, 0).toString());
-            listarInfoGedoc(jTableConsultaUsuario.getValueAt(linha, 0).toString());
+            listarPermissaoUsuarioMastiff(login);
+            listarRegraUsuarioMastiff(login);
+            listarLotacaoUsuarioSIMP(login);
+            listarCoordenadoiaUsuario(login);
+            listarInfoGedoc(login);
         } else{
             jTextAreaCadMastiff.setText("");
+            jTextAreaRegraMastiff.setText("");
             jTextAreaLotacaoUsuario.setText("");
             jTextAreaCadCoordenador.setText("");
             ListarInfoGedocTableModel tableModel = new ListarInfoGedocTableModel();

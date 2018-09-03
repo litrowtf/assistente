@@ -156,6 +156,32 @@ public class Consultas {
         setQuery(consulta.toString());
     }
     
+    /** Regras Mastiff
+     * Consultar regras cadastradas para o usuário no Mastiff.
+     * @param login 
+     */
+    public void consultarUsuarioRegraMastiff(String login) {
+        StringBuilder consulta = new StringBuilder();
+
+        consulta.append("SELECT "
+                + "	DECODE( a.IDREGRA, 1, 'Administrador', "
+                + "	2, 'Processo Sigiloso', "
+                + "	3, 'Movimentar Não Distribuídos', "
+                + "	4, 'Arquivar Não Distribuídos', "
+                + "	5, 'Anexar até 20Mb', "
+                + "	6, 'Editar partes' )"
+                + "FROM "
+                + "	MPPA.USUARIOREGRA a, "
+                + "	mppa.USUARIO c "
+                + "WHERE "
+                + "	a.IDUSUARIO = c.IDUSUARIO "
+                + "	AND c.LOGIN LIKE '");
+        consulta.append(login);
+        consulta.append("'");
+
+        setQuery(consulta.toString());
+    }
+    
     public void consultarUsuarioLotacao(String login) {
         StringBuilder consulta = new StringBuilder();
 
@@ -209,5 +235,5 @@ public class Consultas {
 
         setQuery(consulta.toString());
     }
-
+    
 }

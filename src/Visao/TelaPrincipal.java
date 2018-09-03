@@ -91,6 +91,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         jTextAreaCadCoordenador = new javax.swing.JTextArea();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTextAreaRegraMastiff = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         jTableGEDOC = new javax.swing.JTable();
@@ -168,9 +171,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jLabel8.setText("Cadastro coordenador:");
 
+        jTextAreaCadCoordenador.setEditable(false);
         jTextAreaCadCoordenador.setColumns(20);
         jTextAreaCadCoordenador.setRows(5);
         jScrollPane7.setViewportView(jTextAreaCadCoordenador);
+
+        jLabel11.setText("Regras Mastiff:");
+
+        jTextAreaRegraMastiff.setEditable(false);
+        jTextAreaRegraMastiff.setColumns(20);
+        jTextAreaRegraMastiff.setRows(5);
+        jScrollPane8.setViewportView(jTextAreaRegraMastiff);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -180,7 +191,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane7)
@@ -201,9 +214,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel8)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)
+                    .addComponent(jScrollPane8))
                 .addContainerGap())
         );
 
@@ -690,6 +707,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 jTableConsultaUsuario,
                 jTableGEDOC,
                 jTextAreaCadMastiff,
+                jTextAreaRegraMastiff,
                 jTextAreaLotacaoUsuario,
                 jTextAreaCadCoordenador,
                 statement,
@@ -786,6 +804,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton jButtonConsultarLocalPromVinc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -813,6 +832,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPaneLocais;
     private javax.swing.JTabbedPane jTabbedPanePrincipal;
     private javax.swing.JTabbedPane jTabbedPaneProtocolos;
@@ -824,6 +844,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaCadCoordenador;
     private javax.swing.JTextArea jTextAreaCadMastiff;
     private javax.swing.JTextArea jTextAreaLotacaoUsuario;
+    private javax.swing.JTextArea jTextAreaRegraMastiff;
     private javax.swing.JTextField jTextFieldCPF;
     private javax.swing.JTextField jTextFieldConsultarLocalPromVinc;
     private javax.swing.JTextField jTextFieldEmail;
