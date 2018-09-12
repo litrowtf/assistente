@@ -7,7 +7,10 @@ package Visao;
 
 import Conexao.ConexaoOracle;
 import Controle.LocaisAction;
+import Controle.ProtocoloAction;
 import Controle.UsuariosAction;
+import Modelo.ListarProtocoloErroLEListModel;
+import Modelo.ProtocoloErroLE;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
@@ -15,8 +18,10 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -40,6 +45,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public static final int CAMPOUSUARIOMATRICULA = 12;
     public static final int CAMPOUSUARIOCPF = 13;
     private UsuariosAction usuarioAction;
+    private ProtocoloAction protocoloAction;
     private int countTest1 = 0;
     private int countTest2 = 0;
     private int countTest3 = 0;
@@ -61,7 +67,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
 
         //Não mostrar tab "Protocolos" pois ainda não há nada implementado
-        jTabbedPanePrincipal.removeTabAt(0);
+        //jTabbedPanePrincipal.removeTabAt(0);
 //Usado para setar o atalho do Copiar, porém não funciou... ainda.        
 //jMenuItemCopiar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.ALT_MASK));
     }
@@ -78,7 +84,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPopupMenu = new javax.swing.JPopupMenu();
         jMenuItemCopiar = new javax.swing.JMenuItem();
         jTabbedPanePrincipal = new javax.swing.JTabbedPane();
-        jTabbedPaneProtocolos = new javax.swing.JTabbedPane();
         jTabbedPaneUsuarios = new javax.swing.JTabbedPane();
         jPanelConsultarUsuario = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -124,6 +129,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jButtonConsultarLocalPromVinc = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePromotorVinculado = new javax.swing.JTable();
+        jTabbedPaneProtocolos = new javax.swing.JTabbedPane();
+        jPanelErroLocalExterno = new javax.swing.JPanel();
+        jPanelJLists = new javax.swing.JPanel();
+        jButtonIncluirGerarSQL = new javax.swing.JButton();
+        jButtonExcluirGerarSQL = new javax.swing.JButton();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        jListNumRegGerarSQL = new javax.swing.JList<>();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        jListNumRegConsulta = new javax.swing.JList<>();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jButtonAdicionarTodos = new javax.swing.JButton();
+        jButtonRemoverTodos = new javax.swing.JButton();
+        jPanelErroLEComandos = new javax.swing.JPanel();
+        jFormattedTextFieldNumRegSIMP = new javax.swing.JFormattedTextField();
+        jButtonBuscarProtErroLE = new javax.swing.JButton();
+        jButtonGerarSQL = new javax.swing.JButton();
+        jCheckBoxProtApens = new javax.swing.JCheckBox();
+        jButtonCopiarMensagemSQL = new javax.swing.JButton();
+        jPanelMensSolic = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        jTextAreaMensagemSQL = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -143,10 +171,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setFocusTraversalPolicyProvider(true);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jTabbedPaneProtocolos.setEnabled(false);
-        jTabbedPaneProtocolos.setPreferredSize(new java.awt.Dimension(1010, 580));
-        jTabbedPanePrincipal.addTab("Protocolos", jTabbedPaneProtocolos);
 
         jTabbedPaneUsuarios.setPreferredSize(new java.awt.Dimension(1010, 580));
 
@@ -567,6 +591,216 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTabbedPanePrincipal.addTab("Locais", jTabbedPaneLocais);
 
+        jTabbedPaneProtocolos.setPreferredSize(new java.awt.Dimension(1010, 580));
+
+        jPanelErroLocalExterno.setToolTipText("Buscar protocolos que apresentam o erro \"LocalOrigemVO()\"");
+
+        jButtonIncluirGerarSQL.setText(">>");
+        jButtonIncluirGerarSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonIncluirGerarSQLActionPerformed(evt);
+            }
+        });
+
+        jButtonExcluirGerarSQL.setText("<<");
+        jButtonExcluirGerarSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonExcluirGerarSQLActionPerformed(evt);
+            }
+        });
+
+        jListNumRegGerarSQL.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jListNumRegGerarSQLMousePressed(evt);
+            }
+        });
+        jScrollPane10.setViewportView(jListNumRegGerarSQL);
+
+        jListNumRegConsulta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jListNumRegConsultaMousePressed(evt);
+            }
+        });
+        jScrollPane9.setViewportView(jListNumRegConsulta);
+
+        jLabel12.setText("Registros encontrados:");
+
+        jLabel13.setText("Gerar SQL:");
+
+        jButtonAdicionarTodos.setText("All >");
+        jButtonAdicionarTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdicionarTodosActionPerformed(evt);
+            }
+        });
+
+        jButtonRemoverTodos.setText("< All");
+        jButtonRemoverTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRemoverTodosActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelJListsLayout = new javax.swing.GroupLayout(jPanelJLists);
+        jPanelJLists.setLayout(jPanelJListsLayout);
+        jPanelJListsLayout.setHorizontalGroup(
+            jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelJListsLayout.createSequentialGroup()
+                .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addGroup(jPanelJListsLayout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanelJListsLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButtonAdicionarTodos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonRemoverTodos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButtonIncluirGerarSQL, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jButtonExcluirGerarSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        jPanelJListsLayout.setVerticalGroup(
+            jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelJListsLayout.createSequentialGroup()
+                .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelJListsLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jButtonAdicionarTodos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonIncluirGerarSQL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonExcluirGerarSQL)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonRemoverTodos))
+                    .addGroup(jPanelJListsLayout.createSequentialGroup()
+                        .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanelJListsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(140, Short.MAX_VALUE))
+        );
+
+        jFormattedTextFieldNumRegSIMP.setEditable(false);
+        try {
+            jFormattedTextFieldNumRegSIMP.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("######-###/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        jFormattedTextFieldNumRegSIMP.setText("");
+        jFormattedTextFieldNumRegSIMP.setToolTipText("");
+
+        jButtonBuscarProtErroLE.setText("Buscar protocolos");
+        jButtonBuscarProtErroLE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarProtErroLEActionPerformed(evt);
+            }
+        });
+
+        jButtonGerarSQL.setText("Gerar SQL");
+        jButtonGerarSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonGerarSQLActionPerformed(evt);
+            }
+        });
+
+        jCheckBoxProtApens.setText("Incluir protocolos apensados:");
+        jCheckBoxProtApens.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+
+        jButtonCopiarMensagemSQL.setText("Copiar Mensagem");
+        jButtonCopiarMensagemSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCopiarMensagemSQLActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelErroLEComandosLayout = new javax.swing.GroupLayout(jPanelErroLEComandos);
+        jPanelErroLEComandos.setLayout(jPanelErroLEComandosLayout);
+        jPanelErroLEComandosLayout.setHorizontalGroup(
+            jPanelErroLEComandosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelErroLEComandosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jFormattedTextFieldNumRegSIMP, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonBuscarProtErroLE, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonGerarSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBoxProtApens)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 329, Short.MAX_VALUE)
+                .addComponent(jButtonCopiarMensagemSQL)
+                .addContainerGap())
+        );
+        jPanelErroLEComandosLayout.setVerticalGroup(
+            jPanelErroLEComandosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelErroLEComandosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelErroLEComandosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jFormattedTextFieldNumRegSIMP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonBuscarProtErroLE)
+                    .addComponent(jButtonGerarSQL)
+                    .addComponent(jCheckBoxProtApens)
+                    .addComponent(jButtonCopiarMensagemSQL))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel14.setText("Mensagem de solicitação gerada:");
+
+        jTextAreaMensagemSQL.setColumns(20);
+        jTextAreaMensagemSQL.setRows(5);
+        jScrollPane11.setViewportView(jTextAreaMensagemSQL);
+
+        javax.swing.GroupLayout jPanelMensSolicLayout = new javax.swing.GroupLayout(jPanelMensSolic);
+        jPanelMensSolic.setLayout(jPanelMensSolicLayout);
+        jPanelMensSolicLayout.setHorizontalGroup(
+            jPanelMensSolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelMensSolicLayout.createSequentialGroup()
+                .addComponent(jLabel14)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane11)
+        );
+        jPanelMensSolicLayout.setVerticalGroup(
+            jPanelMensSolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelMensSolicLayout.createSequentialGroup()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane11))
+        );
+
+        javax.swing.GroupLayout jPanelErroLocalExternoLayout = new javax.swing.GroupLayout(jPanelErroLocalExterno);
+        jPanelErroLocalExterno.setLayout(jPanelErroLocalExternoLayout);
+        jPanelErroLocalExternoLayout.setHorizontalGroup(
+            jPanelErroLocalExternoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanelErroLEComandos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanelErroLocalExternoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanelJLists, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanelMensSolic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelErroLocalExternoLayout.setVerticalGroup(
+            jPanelErroLocalExternoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelErroLocalExternoLayout.createSequentialGroup()
+                .addComponent(jPanelErroLEComandos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelErroLocalExternoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelMensSolic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelJLists, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPaneProtocolos.addTab("Erro local externo", jPanelErroLocalExterno);
+
+        jTabbedPanePrincipal.addTab("Protocolos", jTabbedPaneProtocolos);
+
         getContentPane().add(jTabbedPanePrincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 1100, 710));
         jTabbedPanePrincipal.getAccessibleContext().setAccessibleDescription("");
 
@@ -684,11 +918,150 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jTextFieldCPF.selectAll();
     }//GEN-LAST:event_jTextFieldCPFFocusGained
 
+    private void jButtonBuscarProtErroLEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarProtErroLEActionPerformed
+        protocoloAction = new ProtocoloAction(statement);
+        limparJList(3);
+        protocoloAction.buscarProtocolosErroLE(jListNumRegConsulta,""
+                /*jFormattedTextFieldNumRegSIMP.getText()*/,
+                jCheckBoxProtApens.isSelected());
+    }//GEN-LAST:event_jButtonBuscarProtErroLEActionPerformed
+
+    private void jButtonIncluirGerarSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIncluirGerarSQLActionPerformed
+        transferirRegistroLista(jListNumRegConsulta, jListNumRegGerarSQL);
+    }//GEN-LAST:event_jButtonIncluirGerarSQLActionPerformed
+
+    private void jButtonExcluirGerarSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonExcluirGerarSQLActionPerformed
+        transferirRegistroLista(jListNumRegGerarSQL, jListNumRegConsulta);
+    }//GEN-LAST:event_jButtonExcluirGerarSQLActionPerformed
+
+    private void jButtonAdicionarTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdicionarTodosActionPerformed
+        jListNumRegConsulta.setSelectionInterval(0, jListNumRegConsulta.getModel().getSize() - 1);
+        transferirRegistroLista(jListNumRegConsulta, jListNumRegGerarSQL);
+        jListNumRegConsulta.getSelectedIndices();
+    }//GEN-LAST:event_jButtonAdicionarTodosActionPerformed
+
+    private void jButtonRemoverTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRemoverTodosActionPerformed
+        jListNumRegGerarSQL.setSelectionInterval(0, jListNumRegGerarSQL.getModel().getSize()-1);
+        transferirRegistroLista(jListNumRegGerarSQL, jListNumRegConsulta);
+    }//GEN-LAST:event_jButtonRemoverTodosActionPerformed
+
+    private void jButtonGerarSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGerarSQLActionPerformed
+        protocoloAction = new ProtocoloAction(statement);
+        ArrayList<String> listaNumeroRegistro = new ArrayList();
+        if (jListNumRegGerarSQL.getModel().getSize() > 0) {
+            for (int i = 0; i < jListNumRegGerarSQL.getModel().getSize(); i++) {
+//                    ProtocoloErroLE protocoloErroLE = new ProtocoloErroLE();
+//                    protocoloErroLE.setNumeroRegistroErroLE(jListNumRegGerarSQL.getModel().getElementAt(i));
+                listaNumeroRegistro.add(jListNumRegGerarSQL.getModel().getElementAt(i));
+            }
+            protocoloAction.gerarMensagemSQl(jTextAreaMensagemSQL, listaNumeroRegistro);
+        } else {
+            messageDialogWarning("Adicione protocolos na lista \"Gerar SQL\"");
+        }
+    }//GEN-LAST:event_jButtonGerarSQLActionPerformed
+
+    private void jButtonCopiarMensagemSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopiarMensagemSQLActionPerformed
+        copyToClipboard(jTextAreaMensagemSQL.getText());
+    }//GEN-LAST:event_jButtonCopiarMensagemSQLActionPerformed
+
+    private void jListNumRegConsultaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListNumRegConsultaMousePressed
+        if(mouseCliqueDuplo(evt)){
+            transferirRegistroLista(jListNumRegConsulta, jListNumRegGerarSQL);
+        }
+    }//GEN-LAST:event_jListNumRegConsultaMousePressed
+
+    private void jListNumRegGerarSQLMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListNumRegGerarSQLMousePressed
+        if(mouseCliqueDuplo(evt)){
+            transferirRegistroLista(jListNumRegGerarSQL, jListNumRegConsulta);
+        }
+    }//GEN-LAST:event_jListNumRegGerarSQLMousePressed
+
+    /**
+     * Verifica ação de clique duplo no componente
+     * @param evt
+     * @return verdadeiro ou falso
+     */
+    private boolean mouseCliqueDuplo(java.awt.event.MouseEvent evt){
+        if (evt.getClickCount() == 2 && !evt.isConsumed()) {
+            evt.consume();
+            System.out.println("Double Click");
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Exibir caixa de mensagem Warning
+     * @param mensagem Mensagem do Warning
+     */
+    private void messageDialogWarning(String mensagem){
+        JOptionPane.showMessageDialog(this, mensagem, "Atenção!", JOptionPane.WARNING_MESSAGE);
+    }    
+    
+    /**O registro selecionado no jListEnvia é retirado da lista e 
+     * adicionado em jListRecebe.
+     * @param jListEnvia
+     * @param jListRecebe 
+     */
+    private void transferirRegistroLista(JList jListEnvia, JList jListRecebe) {
+        if (jListEnvia.getModel().getSize() > 0
+                && jListEnvia.getSelectedIndices().length > 0) {
+            ArrayList<ProtocoloErroLE> listaProtocolos = new ArrayList();
+            ListarProtocoloErroLEListModel listModel;
+
+            /*Verifica se há protocolos na lista "Gerar SQL", se for verdadeiro, guarda os protocolos 
+              na litaProtocolos para adicionar junto com o que for selecionado em jListNumRegConsulta
+             */
+            if (jListRecebe.getModel().getSize() > 0) {
+                for (int i = 0; i < jListRecebe.getModel().getSize(); i++) {
+                    ProtocoloErroLE protocoloErroLE = new ProtocoloErroLE();
+                    protocoloErroLE.setNumeroRegistroErroLE(jListRecebe.getModel().getElementAt(i).toString());
+                    listaProtocolos.add(protocoloErroLE);
+                }
+            }
+
+            for (Object numRegSimP : jListEnvia.getSelectedValuesList()) {
+                ProtocoloErroLE protocoloErroLE = new ProtocoloErroLE();
+                protocoloErroLE.setNumeroRegistroErroLE(numRegSimP.toString());
+                listaProtocolos.add(protocoloErroLE);
+            }
+
+            //remove os itens selecionados na lista de registros encontrados
+            ((ListarProtocoloErroLEListModel) jListEnvia.getModel()).removeElementAt(jListEnvia.getSelectedIndices());
+            ((ListarProtocoloErroLEListModel) jListEnvia.getModel()).atualizarLista();
+            jListEnvia.clearSelection();
+
+            listModel = new ListarProtocoloErroLEListModel(listaProtocolos);
+            jListRecebe.setModel(listModel);
+        } else{
+            messageDialogWarning("A lista está vazia ou não possui itens selecionados");
+        }
+    }
+        
     private String validaString(Object objeto) {
         if (objeto != null) {
             return objeto.toString();
         }
         return "";
+    }
+    
+    /** Limpar nformações do JList
+     * 
+     * @param opcao = 1: jListNumRegConsulta; = 2: jListNumRegGerarSQL; = 3: (default) limpa jListNumRegConsulta e jListNumRegGerarSQL
+     */
+    private void limparJList(int opcao) {
+        switch (opcao) {
+            case 1:
+                jListNumRegConsulta.setModel(new ListarProtocoloErroLEListModel());
+                break;
+            case 2:
+                jListNumRegGerarSQL.setModel(new ListarProtocoloErroLEListModel());
+                break;
+            default:
+                jListNumRegGerarSQL.setModel(new ListarProtocoloErroLEListModel());
+                jListNumRegConsulta.setModel(new ListarProtocoloErroLEListModel());
+                break;
+        }
     }
 
     private void copyToClipboard(String texto) {
@@ -748,9 +1121,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * @return Nome do programa com o número da versão.
      */
     public String getVersao() {
-        versao = "Alpha V1.3";
+        versao = "Assistente de Suporte - Alpha V1.5";
         
-        return "Assistente de Suporte - " + versao;
+        return versao;
     }
 
     private void abrirConexao() throws SQLException {
@@ -800,11 +1173,23 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonAdicionarTodos;
+    private javax.swing.JButton jButtonBuscarProtErroLE;
     private javax.swing.JButton jButtonBuscarRegistros;
     private javax.swing.JButton jButtonConsultarLocalPromVinc;
+    private javax.swing.JButton jButtonCopiarMensagemSQL;
+    private javax.swing.JButton jButtonExcluirGerarSQL;
+    private javax.swing.JButton jButtonGerarSQL;
+    private javax.swing.JButton jButtonIncluirGerarSQL;
+    private javax.swing.JButton jButtonRemoverTodos;
+    private javax.swing.JCheckBox jCheckBoxProtApens;
+    private javax.swing.JFormattedTextField jFormattedTextFieldNumRegSIMP;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -813,6 +1198,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JList<String> jListNumRegConsulta;
+    private javax.swing.JList<String> jListNumRegGerarSQL;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -824,8 +1211,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanelConsultarUsuario;
+    private javax.swing.JPanel jPanelErroLEComandos;
+    private javax.swing.JPanel jPanelErroLocalExterno;
+    private javax.swing.JPanel jPanelJLists;
+    private javax.swing.JPanel jPanelMensSolic;
     private javax.swing.JPopupMenu jPopupMenu;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -833,6 +1226,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPaneLocais;
     private javax.swing.JTabbedPane jTabbedPanePrincipal;
     private javax.swing.JTabbedPane jTabbedPaneProtocolos;
@@ -844,6 +1238,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaCadCoordenador;
     private javax.swing.JTextArea jTextAreaCadMastiff;
     private javax.swing.JTextArea jTextAreaLotacaoUsuario;
+    private javax.swing.JTextArea jTextAreaMensagemSQL;
     private javax.swing.JTextArea jTextAreaRegraMastiff;
     private javax.swing.JTextField jTextFieldCPF;
     private javax.swing.JTextField jTextFieldConsultarLocalPromVinc;

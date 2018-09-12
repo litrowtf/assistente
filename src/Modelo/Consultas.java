@@ -236,4 +236,60 @@ public class Consultas {
         setQuery(consulta.toString());
     }
     
+    
+    /** Protocolos Erro Local Externo
+     * Consulta para busccar os protocolos que causo o erro: "LocalOrigemVO".
+     * 
+     * @param numeroRegistro
+     * @param mostrarProtApen 
+     */
+    public void consultarProtocolosErroLE(String numeroRegistro, boolean mostrarProtApen) {
+        StringBuilder consulta = new StringBuilder();
+
+        consulta.append("SELECT NUMEROREGISTRO "
+                + "FROM 	PROTOCOLO "
+                + "WHERE 	SITUACAO = 4 "
+                + "AND 	IDLOCALATUAL IS NOT NULL "
+                + "AND 	IDDETENTORATUAL IS NOT NULL ");
+        if (!mostrarProtApen) { //Se mostrarProtApen for true mostra todos os protocolos
+            consulta.append("AND 	TIPOAPENSO = 1 ");
+        }
+        if (!numeroRegistro.isEmpty()) { //Se numeroRegistro for vazio, mostra todos os protocolos
+            consulta.append("AND NUMEROREGISTRO LIKE '");
+            consulta.append(numeroRegistro);
+            consulta.append("'");
+        }
+
+        setQuery(consulta.toString());
+    }
+    
+    
+//    public void gerarMensagemSQL(String numeroRegistro) {
+    /**Gerar mensagem SQL
+     * 
+     * @param numeroRegistro numero de registro do protocolo SIMP
+     */
+    public void gerarMensagemSQL(String numeroRegistro) {
+        StringBuilder consulta = new StringBuilder();
+        consulta.append("SELECT 'UPDATE \n");
+        consulta.append("       PROTOCOLO \n");
+        consulta.append("SET \n");
+        consulta.append("       IDLOCALATUAL = NULL \n");
+        consulta.append("       ,IDLOCALDESTINO = ' || IDLOCALDESTINO || '\n");
+        consulta.append("       ,IDDETENTORATUAL = NULL \n");
+        consulta.append("WHERE '");
+        consulta.append("        || 'IDPROTOCOLO = ' || IDPROTOCOLO ");
+        consulta.append("FROM (SELECT MAX(a.DATAHORA ), MAX(a.IDLOCALDESTINO) IDLOCALDESTINO, "
+                + "MAX(b.IDPROTOCOLO) IDPROTOCOLO FROM MPPA.PROTOCOLOMOVIMENTO a, "
+                + "MPPA.PROTOCOLO b "
+                + "WHERE a.IDPROTOCOLO = "
+                + "b.IDPROTOCOLO AND a.ATIVO = 2 " //apenas movimentos ativos
+                + "AND a.IDMOVIMENTO = 920024 " //movimento de encaminhamento a orgão externo
+//                + "AND b.SITUACAO != 3 " //não considerar protocolos autuados (cod 3)
+                + "AND b.NUMEROREGISTRO LIKE '");
+        consulta.append(numeroRegistro);
+        consulta.append("' GROUP BY b.NUMEROREGISTRO)");
+
+        setQuery(consulta.toString());
+    }
 }
