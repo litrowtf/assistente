@@ -46,9 +46,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
     public static final int CAMPOUSUARIOCPF = 13;
     private UsuariosAction usuarioAction;
     private ProtocoloAction protocoloAction;
-    private int countTest1 = 0;
-    private int countTest2 = 0;
-    private int countTest3 = 0;
     private String utimoFoco = "";
     private String versao;
     private Connection conexao;
@@ -152,6 +149,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jScrollPane11 = new javax.swing.JScrollPane();
         jTextAreaMensagemSQL = new javax.swing.JTextArea();
+        jLabel15 = new javax.swing.JLabel();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        jTextAreaProtocolosNaoGerados = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -758,21 +758,34 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jTextAreaMensagemSQL.setRows(5);
         jScrollPane11.setViewportView(jTextAreaMensagemSQL);
 
+        jLabel15.setText("Protocolos que não geraram SQL:");
+
+        jTextAreaProtocolosNaoGerados.setColumns(20);
+        jTextAreaProtocolosNaoGerados.setRows(5);
+        jScrollPane12.setViewportView(jTextAreaProtocolosNaoGerados);
+
         javax.swing.GroupLayout jPanelMensSolicLayout = new javax.swing.GroupLayout(jPanelMensSolic);
         jPanelMensSolic.setLayout(jPanelMensSolicLayout);
         jPanelMensSolicLayout.setHorizontalGroup(
             jPanelMensSolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelMensSolicLayout.createSequentialGroup()
-                .addComponent(jLabel14)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addComponent(jScrollPane11)
+            .addGroup(jPanelMensSolicLayout.createSequentialGroup()
+                .addGroup(jPanelMensSolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(jLabel15))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jScrollPane12)
         );
         jPanelMensSolicLayout.setVerticalGroup(
             jPanelMensSolicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelMensSolicLayout.createSequentialGroup()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane11))
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane12))
         );
 
         javax.swing.GroupLayout jPanelErroLocalExternoLayout = new javax.swing.GroupLayout(jPanelErroLocalExterno);
@@ -955,6 +968,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 listaNumeroRegistro.add(jListNumRegGerarSQL.getModel().getElementAt(i));
             }
             protocoloAction.gerarMensagemSQl(jTextAreaMensagemSQL, listaNumeroRegistro);
+            jTextAreaProtocolosNaoGerados.setText(protocoloAction.protocolosNaoGerados());
         } else {
             messageDialogWarning("Adicione protocolos na lista \"Gerar SQL\"");
         }
@@ -1121,7 +1135,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
      * @return Nome do programa com o número da versão.
      */
     public String getVersao() {
-        versao = "Assistente de Suporte - Alpha V1.5";
+        versao = "Assistente de Suporte - Alpha V1.5";  
         
         return versao;
     }
@@ -1190,6 +1204,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1219,6 +1234,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -1239,6 +1255,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaCadMastiff;
     private javax.swing.JTextArea jTextAreaLotacaoUsuario;
     private javax.swing.JTextArea jTextAreaMensagemSQL;
+    private javax.swing.JTextArea jTextAreaProtocolosNaoGerados;
     private javax.swing.JTextArea jTextAreaRegraMastiff;
     private javax.swing.JTextField jTextFieldCPF;
     private javax.swing.JTextField jTextFieldConsultarLocalPromVinc;

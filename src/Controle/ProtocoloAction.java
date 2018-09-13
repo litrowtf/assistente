@@ -8,7 +8,6 @@ package Controle;
 import Modelo.Consultas;
 import Modelo.ProtocoloErroLE;
 import Modelo.ListarProtocoloErroLEListModel;
-import Modelo.ProtErroMensagemSQL;
 import Visao.TelaPrincipal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -27,6 +26,7 @@ import javax.swing.JTextArea;
 public class ProtocoloAction {
 
     private Statement statement;
+    private StringBuilder naoGerouSQL;
 
     public ProtocoloAction(Statement statement) {
         this.statement = statement;
@@ -75,19 +75,23 @@ public class ProtocoloAction {
         ResultSetMetaData metaRS;
         int columnCount;
         StringBuilder sb = new StringBuilder();
+        naoGerouSQL = new StringBuilder();
+        boolean flagGerouSQL;
+        int countPulaLinha = 0;
 
         try {
             Consultas consulta = new Consultas();
             sb.append("Solicito alteração, na base de produção, dos seguintes registros: \n \n \n");
             
             for (String lnr : listaNumeroRegistro) {
-                
+                flagGerouSQL = false;
                 consulta.gerarMensagemSQL(lnr);
                 ResultSet resultSet = statement.executeQuery(consulta.getQuery());
 
                 metaRS = resultSet.getMetaData();
                 columnCount = metaRS.getColumnCount();
                 while (resultSet.next()) {
+                    flagGerouSQL = true; //a chave é verdadeira quando gera o SQL
                     for (int i = 1; i <= columnCount; i++) {
 //                        protErroMensagemSQL.setMensageSQL(resultSet.getString(i));
                           sb.append("--Protocolo: ");
@@ -98,6 +102,15 @@ public class ProtocoloAction {
                     }
 //                    listaProtErroMensagemSQL.add(protErroMensagemSQL);
                 }
+                if(!flagGerouSQL){
+                    naoGerouSQL.append(lnr);
+                    naoGerouSQL.append(", ");
+                    if(countPulaLinha == 4){
+                        naoGerouSQL.append("\n");
+                        countPulaLinha = 0;
+                    }
+                    countPulaLinha++;
+                }
             }
             
             
@@ -106,5 +119,14 @@ public class ProtocoloAction {
         } catch (SQLException ex) {
             Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public String protocolosNaoGerados() {
+        try{
+            return naoGerouSQL.toString();
+        } catch (NullPointerException e){
+            Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return "Erro ao registrar protocolos sem SQL";
     }
 }
