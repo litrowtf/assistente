@@ -42,6 +42,12 @@ public class ListarProtocoloErroLEListModel extends AbstractListModel{
             linhas.remove(selecionados[i]);
         }
     }
+    public void removeAllElements() {
+        int size = linhas.size() - 1;
+        for (int i = size; i >= 0; i--) {
+            linhas.remove(i);
+        }
+    }
     
     public void atualizarLista(){
         super.fireContentsChanged(this, linhas.size(), linhas.size());
